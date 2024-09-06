@@ -12,7 +12,7 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v3
         with:
-          java-version: '11'
+          java-version: '22'
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -42,7 +42,7 @@ jobs:
           adb shell input keyevent 82 # Unlock device
 
       - name: Install APK on emulator
-        run: adb install -r path/to/your-app.apk
+        run: adb install -r Advocall.apk
 
       - name: Run Appium server
         run: appium &
