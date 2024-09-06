@@ -1,0 +1,54 @@
+name: Run Appium Tests
+
+on: [workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: |
+          npm install -g appium
+
+      - name: Set up Android SDK
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget unzip
+          wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip -O android-commandlinetools.zip
+          mkdir -p $ANDROID_HOME/cmdline-tools
+          unzip android-commandlinetools.zip -d $ANDROID_HOME/cmdline-tools
+          yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager --licenses
+          $ANDROID_HOME/cmdline-tools/bin/sdkmanager "platform-tools" "platforms;android-30" "system-images;android-30;google_apis;x86_64"
+          $ANDROID_HOME/cmdline-tools/bin/sdkmanager --update
+
+      - name: Create and start Android emulator
+        run: |
+          echo no | $ANDROID_HOME/cmdline-tools/bin/avdmanager create avd -n test_avd -k "system-images;android-30;google_apis;x86_64" --device "pixel"
+          $ANDROID_HOME/emulator/emulator -avd test_avd -no-snapshot -noaudio -no-boot-anim &
+          adb wait-for-device
+          adb shell input keyevent 82 # Unlock device
+
+      - name: Install APK on emulator
+        run: adb install -r path/to/your-app.apk
+
+      - name: Run Appium server
+        run: appium &
+
+      - name: Run tests
+        run: mvn test
+
+      - name: Stop Appium server
+        run: kill $(lsof -t -i:4723) || true
