@@ -10,7 +10,6 @@
 ### Шаги для запуска тестов:
 
 - Склонировать этот репозиторий к себе  `git clone https://github.com/s1yf0x/advocallAssigment.git`
-- При необходимости внести изменения в `caps.properties`  который содержит настройки capabilities
 - Подключить устройство Android по USB кабелю и убедиться что оно доступно через команду `adb devices`
 - Запустить appium и установить в него драйвер `UiAutomator2` с помощью команды `appium driver install uiautomator2  `
 - Запустить тест с помощью команды `mvn test` из директории проекта

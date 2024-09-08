@@ -1,3 +1,4 @@
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
@@ -6,8 +7,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-
-import static org.junit.Assert.*;
 
 public class MainActivityTest extends AppiumTestBase {
 
@@ -22,6 +21,8 @@ public class MainActivityTest extends AppiumTestBase {
     private static final By USER_AVATAR = By.xpath("//androidx.compose.ui.platform.ComposeView/android.view.View/android.view.View");
     private static final By CONS_MENU = By.xpath("//android.widget.TextView[@text=\"Консультация\"]\n");
     private static final By CALL_MENU = By.xpath("//android.widget.TextView[@text=\"Вызов\"]\n");
+    private static final By DONT_ALLOW_NOTIFICATIONS_BUTTON_XPATH = By.xpath("//android.widget.Button[@resource-id=\"com.android.permissioncontroller:id/permission_deny_button\"]");
+
 
     @Test
     public void testAppFlow() {
@@ -75,6 +76,19 @@ public class MainActivityTest extends AppiumTestBase {
         WebElement loginButton = wait.until(ExpectedConditions.visibilityOfElementLocated(LOGIN_BUTTON_XPATH));
         loginButton.click();
 
+        try {
+            // Ожидание, пока элемент не станет доступен
+            WebElement messageButton = wait.until(ExpectedConditions.visibilityOfElementLocated(DONT_ALLOW_NOTIFICATIONS_BUTTON_XPATH));
+            // Клик по элементу
+            messageButton.click();
+        } catch (TimeoutException e) {
+            // Обработка ситуации, когда элемент не появился в течение 5 секунд
+            System.out.println("Кнопка разрешения нотификаций не появилась в течении 10 секунд, пропускаем шаг");
+        } catch (Exception e) {
+            // Обработка других возможных исключений
+            e.printStackTrace();
+        }
+
         // Шаг 17: Дождаться загрузки экрана
         wait.until(ExpectedConditions.visibilityOfElementLocated(USER_AVATAR));
 
@@ -82,9 +96,9 @@ public class MainActivityTest extends AppiumTestBase {
         WebElement consMenu = wait.until(ExpectedConditions.visibilityOfElementLocated(CONS_MENU));
         WebElement callMenu = wait.until(ExpectedConditions.visibilityOfElementLocated(CALL_MENU));
 
-        assertNotNull("Меню Консультация отсутвует", consMenu);
-        assertTrue("Меню Консультация не видимо", consMenu.isDisplayed());
-        assertNotNull("Меню Вызов отсутвует", callMenu);
-        assertTrue("Меню Вызов не видимо", callMenu.isDisplayed());
+        Assertions.assertNotNull(consMenu, "Меню Консультация отсутвует");
+        Assertions.assertTrue(consMenu.isDisplayed(), "Меню Консультация не видимо");
+        Assertions.assertNotNull(callMenu, "Меню Вызов отсутвует");
+        Assertions.assertTrue(callMenu.isDisplayed(), "Меню Вызов не видимо");
     }
 }

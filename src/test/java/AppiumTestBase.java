@@ -26,6 +26,8 @@ public class AppiumTestBase {
 
         capabilities.setCapability("platformName", "Android");
         capabilities.setCapability("appium:automationName", "UiAutomator2");
+        capabilities.setCapability("appium:appPackage", "me.advocall.app.client");
+        capabilities.setCapability("appium:appActivity", "me.advocall.app.client.main.MainActivity");
 
         // Инициализируем драйвер
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723/"), capabilities);
