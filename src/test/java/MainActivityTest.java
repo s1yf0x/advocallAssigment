@@ -28,71 +28,72 @@ public class MainActivityTest extends AppiumTestBase {
     public void testAppFlow() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // Устанавливаем время ожидания в 5 секунд
 
-        // Шаг 2: Дождаться кнопки "далее" и нажать
+        //Дождаться кнопки "далее" и нажать
         WebElement nextButton = wait.until(ExpectedConditions.visibilityOfElementLocated(NEXT_BUTTON_XPATH));
         nextButton.click();
 
-        // Шаг 4: Дождаться кнопки "далее" и нажать
+        //Дождаться кнопки "далее" и нажать
         nextButton = wait.until(ExpectedConditions.visibilityOfElementLocated(NEXT_BUTTON_XPATH));
         nextButton.click();
 
-        // Шаг 6: Дождаться кнопки "разрешить" и нажать
+        //Дождаться кнопки "разрешить" и нажать
         WebElement allowButton = wait.until(ExpectedConditions.visibilityOfElementLocated(ALLOW_BUTTON_XPATH));
         allowButton.click();
 
-        // Шаг 8: Дождаться появления служебного сообщения и нажать "только в этот раз"
+        //Дождаться появления служебного сообщения и нажать "только в этот раз"
 
         try {
-            // Ожидание, пока элемент не станет доступен
+            //Ожидание, пока элемент не станет доступен
             WebElement messageButton = wait.until(ExpectedConditions.visibilityOfElementLocated(ONLY_THIS_TIME_BUTTON_XPATH));
-            // Клик по элементу
+            //Клик по элементу
             messageButton.click();
         } catch (TimeoutException e) {
-            // Обработка ситуации, когда элемент не появился в течение 5 секунд
+            //Обработка ситуации, когда элемент не появился в течение 10 секунд
             System.out.println("Кнопка разрешения геолокаци не появилась в течении 10 секунд, пропускаем шаг");
         } catch (Exception e) {
             // Обработка других возможных исключений
             e.printStackTrace();
         }
 
-        // Шаг 10: Дождаться кнопки "готово" и нажать
+        //Дождаться кнопки "готово" и нажать
         WebElement doneButton = wait.until(ExpectedConditions.visibilityOfElementLocated(DONE_BUTTON_XPATH));
         doneButton.click();
 
-        // Шаг 12: Дождаться поле ввода номера телефона и ввести номер
+        //Дождаться поле ввода номера телефона и ввести номер
         WebElement phoneInput = wait.until(ExpectedConditions.visibilityOfElementLocated(PHONE_INPUT_XPATH));
         phoneInput.sendKeys("9999999999");
 
-        // Шаг 13: Нажать "получить код"
+        //Нажать "получить код"
         WebElement getCodeButton = wait.until(ExpectedConditions.visibilityOfElementLocated(GET_CODE_BUTTON_XPATH));
         getCodeButton.click();
 
-        // Шаг 14: Дождаться кнопки логина и ввести код
+        //Дождаться кнопки логина и ввести код
         wait.until(ExpectedConditions.visibilityOfElementLocated(LOGIN_BUTTON_XPATH));
         WebElement codeInput = wait.until(ExpectedConditions.visibilityOfElementLocated(CODE_INPUT_XPATH));
         codeInput.sendKeys("1111");
 
-        // Шаг 16: Нажать "войти"
+        //Нажать "войти"
         WebElement loginButton = wait.until(ExpectedConditions.visibilityOfElementLocated(LOGIN_BUTTON_XPATH));
         loginButton.click();
 
+        //Ожидаем если появится сообщение о просьбе разрешения уведомлений
         try {
             // Ожидание, пока элемент не станет доступен
             WebElement messageButton = wait.until(ExpectedConditions.visibilityOfElementLocated(DONT_ALLOW_NOTIFICATIONS_BUTTON_XPATH));
             // Клик по элементу
             messageButton.click();
         } catch (TimeoutException e) {
-            // Обработка ситуации, когда элемент не появился в течение 5 секунд
+            // Обработка ситуации, когда элемент не появился в течение 10 секунд
             System.out.println("Кнопка разрешения нотификаций не появилась в течении 10 секунд, пропускаем шаг");
         } catch (Exception e) {
             // Обработка других возможных исключений
             e.printStackTrace();
         }
 
-        // Шаг 17: Дождаться загрузки экрана
+        // Дождаться загрузки экрана
         wait.until(ExpectedConditions.visibilityOfElementLocated(USER_AVATAR));
 
-        // Шаг 18: Проверить пункты меню
+        // Проверить пункты меню
         WebElement consMenu = wait.until(ExpectedConditions.visibilityOfElementLocated(CONS_MENU));
         WebElement callMenu = wait.until(ExpectedConditions.visibilityOfElementLocated(CALL_MENU));
 
